@@ -8,7 +8,7 @@ from datetime import datetime
 
 class BaseModel:
     """This BaseModel class will serve as the base for other classes"""
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """
             The __init__ method initializes instances of the class
         """
