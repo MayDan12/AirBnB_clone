@@ -6,9 +6,9 @@ this moduleis responsible for serializing instances to a JSON file
 and deserializing a JSON file to instances.
 """
 
+
 class FileStorage:
-    """
-    that serializes instances to a JSON file 
+    """that serializes instances to a JSON file
     and deserializes JSON file to instances
     """
     __file_path = "file.json"
@@ -28,12 +28,13 @@ class FileStorage:
         serialized_objects = {}
         for key, obj in self.__objects.items():
             serialized_objects[key] = obj.to_dict()
-        
+
         with open(self.__file_path, 'w') as file:
             json.dump(serialized_objects, file)
 
     def reload(self):
-        """ deserializes the JSON file to __objects (only if the JSON file (__file_path) exists """
+        """ deserializes the JSON file to __objects (only if the JSON file
+        (__file_path) exists """
         try:
             with open(self.__file_path, 'r') as file:
                 data = json.load(file)
