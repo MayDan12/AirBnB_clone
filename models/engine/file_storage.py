@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import json
+import os
 """
 this moduleis responsible for serializing instances to a JSON file
 and deserializing a JSON file to instances.
@@ -35,12 +36,22 @@ class FileStorage:
     def reload(self):
         """ deserializes the JSON file to __objects (only if the JSON file
         (__file_path) exists """
-        try:
-            with open(self.__file_path, 'r') as file:
-                data = json.load(file)
-                for key, obj_data in data.items():
-                    class_name, obj_id = key.split('.')
-                    obj = globals()[class_name](**obj_data)
-                    self.__objects[key] = obj
-        except FileNotFoundError:
-            print("File not found")
+        if not os.path.isfile(FileStorage.__file_path):
+            return
+
+        with open(self.__file_path, 'r') as file:
+            data = json.load(file)
+            obj_dict = {
+                    key: self.get_class_by_name()[value["__class__"]](**value)
+                    for key, value in data.items()}
+            self.__objects = obj_dict
+
+    def get_class_by_name(self):
+        """Returns the class type based on the class name."""
+
+        from models.base_model import BaseModel
+
+        class_mapping = {
+            'BaseModel': BaseModel,
+        }
+        return class_mapping
